@@ -1,34 +1,32 @@
-import React, { useEffect } from 'react';
+import useFetch from "../useFetch";
+
 function Home() {
-   // https://gateway.marvel.com:443/v1/public/characters?ts=1&apikey=e4fd356549043ba5ec47548f878038b7&hash=b9d97f5b9446948a1964dc720615cda3
-  
-  // key privada: 0754ae586cfdf4835bf4019a3a549b549bbb9890
-  // key publica: e4fd356549043ba5ec47548f878038b7
-  // ts: 1
-  // 10754ae586cfdf4835bf4019a3a549b549bbb9890e4fd356549043ba5ec47548f878038b7
+  const url =
+    "https://gateway.marvel.com:443/v1/public/characters?ts=1&apikey=e4fd356549043ba5ec47548f878038b7&hash=b9d97f5b9446948a1964dc720615cda3";
+  const { data, loading } = useFetch(url);
 
-  // hash: b9d97f5b9446948a1964dc720615cda3
+  return (
+    <main 
+    style={{backgroundColor: "black", color: "white", display: "flex", flexDirection: "column", placeItems: "center", maxWidth: "800px", margin: "0"}}
+    className="App">
+      <h1>Fetch like a pro</h1>
+      <ul>
+        {loading && <li>Cargando...</li>}
+        {data &&
+          data.map(item => (
+            <li key={item.id}>
+              <h2>{item.name}</h2>
+              {item.description ? (
+                <p>{item.description}</p>
+              ) : (
+                <p>No hay descripción de este personaje</p>
+              )}
+            </li>
+          ))}
+      </ul>
+    </main>
+  );
+}
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('https://gateway.marvel.com:443/v1/public/characters?ts=1&apikey=e4fd356549043ba5ec47548f878038b7&hash=b9d97f5b9446948a1964dc720615cda3');
-        const data = await response.json();
-        console.log(data);
-        // Realiza operaciones con los datos obtenidos aquí
-      } catch (error) {
-        console.log('Error:', error);
-      }
-    };
+export default Home;
 
-    fetchData();
-  }, []);
-    return (
-      <div className="App">
-        <button className="btn btn-primary">HOME BTN!</button>
-
-      </div>
-    );
-  }
-  
-  export default Home;
